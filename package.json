@@ -15,7 +15,8 @@
   "author": "Thangadurai Nainamalai<duraithanga3@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "webpack-dev-server --inline --progress --port 8080",
+    "start": "webpack-dev-server --config config/webpack.dev.js --progress --profile --colors --watch --display-error-details --display-cached --content-base src/",
+    "start:hmr": "npm start -- --inline --hot",
     "test": "karma start",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "postinstall": "typings install"
@@ -36,6 +37,8 @@
     "zone.js": "0.6.12"
   },
   "devDependencies": {
+    "@angularclass/hmr": "^1.0.1",
+    "@angularclass/hmr-loader": "^1.0.1",
     "angular2-hmr": "^0.8.1",
     "angular2-template-loader": "^0.4.0",
     "copy-webpack-plugin": "^3.0.1",

@@ -34,7 +34,7 @@ module.exports = {
     loaders: [
       {
         test: /\.ts$/,
-        loaders: ['ts', 'angular2-template-loader']
+        loaders: ['ts', 'angular2-template-loader', '@angularclass/hmr-loader']
       },
       {
         test: /\.html$/,
