@@ -7,13 +7,13 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const helpers = require('./helpers');
 const CreateHtmlElements = require("./create-html-elements");
 
 module.exports = {
   metadata: {
-    title: "Angular 2 Webpack",
+    title: "Angular 2 Webpack Typings",
     baseUrl: "/",
     isDevServer: helpers.isWebpackDevServer()
   },
@@ -34,30 +34,28 @@ module.exports = {
     loaders: [
       {
         test: /\.ts$/,
-        loaders: ['ts', 'angular2-template-loader', '@angularclass/hmr-loader']
+        loaders: [
+          'awesome-typescript-loader',
+          'angular2-template-loader',
+          '@angularclass/hmr-loader'
+        ],
+        exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
         test: /\.html$/,
-        loader: 'html'
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'file?name=assets/[name].[hash].[ext]'
+        loader: 'html',
+        exclude: [helpers.root('src/index.html')]
       },
       {
         test: /\.css$/,
-        exclude: helpers.root('src', 'app'),
-        loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
-      },
-      {
-        test: /\.css$/,
-        include: helpers.root('src', 'app'),
-        loader: 'raw'
+        loaders: ['to-string-loader', 'css-loader']
       }
     ]
   },
 
   plugins: [
+    new ForkCheckerPlugin(),
+
     new webpack.optimize.OccurenceOrderPlugin(true),
 
     new webpack.optimize.CommonsChunkPlugin({

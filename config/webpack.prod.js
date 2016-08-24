@@ -6,7 +6,6 @@
 
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
 
@@ -26,8 +25,8 @@ module.exports = webpackMerge(commonConfig, {
 
   output: {
     path: helpers.root("dist"),
-    filename: "[name].bundle.js",
-    sourceMapFilename: "[name].bundle.map",
+    filename: "[name].js",
+    sourceMapFilename: "[name].map",
     chunkFilename: "[id].chunk.js"
   },
 
@@ -52,7 +51,6 @@ module.exports = webpackMerge(commonConfig, {
       compress: { screw_ie8: true },
       comments: false
     }),
-    new ExtractTextPlugin('[name].[hash].css'),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(METADATA.ENV),
       'HMR': METADATA.HMR,
@@ -62,8 +60,18 @@ module.exports = webpackMerge(commonConfig, {
         'HMR': METADATA.HMR,
       }
     }),
-    new webpack.NormalModuleReplacementPlugin(/angular2-hmr/, function() {})
+    new NormalModuleReplacementPlugin(
+      /angular2-hmr/,
+      helpers.root('config/modules/angular2-hmr-prod.js')
+    ),
   ],
+
+  tslint: {
+    emitErrors: true,
+    failOnHint: true,
+    resourcePath: 'src'
+  },
+
   node: {
     process: false
   }

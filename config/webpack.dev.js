@@ -6,7 +6,6 @@
 
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const commonConfig = require('./webpack.common.js');
 const helpers = require('./helpers');
 
@@ -26,16 +25,14 @@ module.exports = webpackMerge(commonConfig, {
 
   output: {
     path: helpers.root("dist"),
-    filename: "[name].bundle.js",
-    sourceMapFilename: "[name].bundle.map",
-    chunkFilename: "[id].chunk.js",
+    filename: "[name].js",
+    sourceMapFilename: "[name].map",
+    chunkFilename: "[id].js",
     library: 'ac_[name]',
     libraryTarget: 'var'
   },
 
   plugins: [
-    new ExtractTextPlugin('[name].css'),
-
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(METADATA.ENV),
       'HMR': METADATA.HMR,
@@ -46,6 +43,12 @@ module.exports = webpackMerge(commonConfig, {
       }
     })
   ],
+
+  tslint: {
+    emitErrors: false,
+    failOnHint: false,
+    resourcePath: 'src'
+  },
 
   devServer: {
     host: METADATA.host,

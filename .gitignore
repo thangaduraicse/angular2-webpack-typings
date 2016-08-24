@@ -4,5 +4,4 @@
 .typingsrc
 npm-debug.log
 node_modules
-typings/globals
-typings/modules
+typings

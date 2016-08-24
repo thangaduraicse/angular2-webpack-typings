@@ -18,14 +18,39 @@ module.exports = {
   },
 
   module: {
+    preLoaders: [
+      {
+        test: /\.ts$/,
+        loader: 'tslint-loader',
+        exclude: [helpers.root('node_modules')]
+      },
+      {
+        test: /\.js$/,
+        loader: 'source-map-loader',
+        exclude: [
+          helpers.root('node_modules/rxjs'),
+          helpers.root('node_modules/@angular')
+        ]
+      }
+    ],
     loaders: [
       {
         test: /\.ts$/,
-        loaders: ['ts', 'angular2-template-loader']
+        loaders: [
+          'awesome-typescript-loader',
+          'angular2-template-loader'
+        ],
+        query: {
+          compilerOptions: {
+            removeComments: true
+          }
+        },
+        exclude: [/\.e2e\.ts$/]
       },
       {
         test: /\.html$/,
-        loader: 'html'
+        loader: 'html',
+        exclude: [helpers.root('src/index.html')]
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
@@ -33,13 +58,18 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: helpers.root('src', 'app'),
-        loader: 'null'
-      },
+        loaders: ['to-string-loader', 'css-loader'],
+        exclude: [helpers.root('src/index.html')]
+      }
+    ],
+    postLoaders: [
       {
-        test: /\.css$/,
-        include: helpers.root('src', 'app'),
-        loader: 'raw'
+        test: /\.(js|ts)$/, loader: 'istanbul-instrumenter-loader',
+        include: helpers.root('src'),
+        exclude: [
+          /\.(e2e|spec)\.ts$/,
+          /node_modules/
+        ]
       }
     ]
   },
@@ -55,6 +85,12 @@ module.exports = {
       }
     })
   ],
+
+  tslint: {
+    emitErrors: false,
+    failOnHint: false,
+    resourcePath: 'src'
+  },
 
   node: {
     global: 'window',
