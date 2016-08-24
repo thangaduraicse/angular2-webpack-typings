@@ -60,7 +60,7 @@ module.exports = webpackMerge(commonConfig, {
         'HMR': METADATA.HMR,
       }
     }),
-    new NormalModuleReplacementPlugin(
+    new webpack.NormalModuleReplacementPlugin(
       /angular2-hmr/,
       helpers.root('config/modules/angular2-hmr-prod.js')
     ),
