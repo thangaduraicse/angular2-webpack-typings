@@ -29,12 +29,13 @@ export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState) {}
   hmrOnInit(store) {
     if (!store || !store.state) return;
-    this.appState.set('state', store.state);
+    this.appState._state = store.state;
+    this.appRef.tick();
     delete store.state;
   }
   hmrOnDestroy(store) {
     var cmpLocation = this.appRef.components.map(cmp => cmp.location.nativeElement);
-    var state = this.appState.state;
+    var state = this.appState._state;
     store.state = state;
     store.disposeOldHosts = createNewHosts(cmpLocation)
     removeNgStyles();
